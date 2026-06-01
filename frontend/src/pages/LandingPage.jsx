@@ -57,11 +57,11 @@ const LandingPage = () => {
         <div className="nav-container">
           <div className="nav-content">
             <div className="nav-logo">
-              <img 
-                src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/6b7x4lur_BM%20Logo.jpg" 
-                alt="BigMotion Logo" 
-                className="logo-img"
-              />
+              <span className="logo-text" onClick={() => scrollToSection('hero')}>
+                <span className="logo-big">Big</span>
+                <span className="logo-divider">|</span>
+                <span className="logo-motion">Motion</span>
+              </span>
             </div>
             
             <div className={`nav-links ${isMenuOpen ? 'open' : ''}`}>
@@ -661,11 +661,11 @@ const LandingPage = () => {
         <div className="footer-content">
           <div className="footer-top">
             <div className="footer-brand">
-              <img 
-                src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/6b7x4lur_BM%20Logo.jpg" 
-                alt="BigMotion" 
-                className="footer-logo"
-              />
+              <span className="logo-text footer-logo-text">
+                <span className="logo-big">Big</span>
+                <span className="logo-divider">|</span>
+                <span className="logo-motion">Motion</span>
+              </span>
               <p className="footer-tagline">Vision Into Momentum</p>
               <div className="footer-socials">
                 <a href="#" className="social-link"><Instagram size={20} /></a>
