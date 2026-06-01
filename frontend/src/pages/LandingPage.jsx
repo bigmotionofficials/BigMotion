@@ -59,7 +59,6 @@ const LandingPage = () => {
             <div className="nav-logo">
               <span className="logo-text" onClick={() => scrollToSection('hero')}>
                 <span className="logo-big">Big</span>
-                <span className="logo-divider">|</span>
                 <span className="logo-motion">Motion</span>
               </span>
             </div>
@@ -663,7 +662,6 @@ const LandingPage = () => {
             <div className="footer-brand">
               <span className="logo-text footer-logo-text">
                 <span className="logo-big">Big</span>
-                <span className="logo-divider">|</span>
                 <span className="logo-motion">Motion</span>
               </span>
               <p className="footer-tagline">Vision Into Momentum</p>
