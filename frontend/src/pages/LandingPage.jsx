@@ -201,7 +201,7 @@ const LandingPage = () => {
                 <span>Facebook</span>
               </div>
               <div className="marquee-item">
-                <img src="https://cdn.simpleicons.org/instagram/E4405F" alt="Instagram" />
+                <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/475sh1cs_instagram%20logo.png" alt="Instagram" />
                 <span>Instagram</span>
               </div>
               <div className="marquee-item">
@@ -213,15 +213,19 @@ const LandingPage = () => {
                 <span>Meta Ads</span>
               </div>
               <div className="marquee-item">
-                <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/lmpqa7al_image.png" alt="Google Business" />
+                <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/6s0xn00v_Google%20Business.png" alt="Google Business" />
                 <span>Google Business</span>
               </div>
               <div className="marquee-item">
-                <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/lkx66zkq_image.png" alt="Google Maps" />
+                <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/krfg2rzo_Google%20Map%20Icon.png" alt="Google Maps" />
                 <span>Google Maps</span>
               </div>
               <div className="marquee-item">
-                <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/gu837u62_image.png" alt="OpenAI" className="logo-invert" />
+                <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/uuprez1t_linkedin%20icon.png" alt="LinkedIn" />
+                <span>LinkedIn</span>
+              </div>
+              <div className="marquee-item">
+                <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/m9tc1ulu_OpenAI%20logo.png" alt="OpenAI" />
                 <span>OpenAI</span>
               </div>
               <div className="marquee-item">
