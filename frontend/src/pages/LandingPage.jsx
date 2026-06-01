@@ -532,17 +532,17 @@ const LandingPage = () => {
                 <div className="client-logo-card">
                   <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/8qpt8nhl_Cake%26Cafe.png" alt="Cake and Cafe" />
                 </div>
-                <div className="client-logo-card text-logo">
-                  <span className="client-text-name">Curls &amp; Café</span>
+                <div className="client-logo-card">
+                  <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/95smo24n_Curls%26Cafe%20Logo.jpg" alt="Curls & Café" />
                 </div>
-                <div className="client-logo-card text-logo">
-                  <span className="client-text-name">BlueWhale Publications</span>
+                <div className="client-logo-card">
+                  <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/2a3cq62c_Bluewhale%20Brand%20Name.svg" alt="BlueWhale Publications" className="logo-light" />
                 </div>
-                <div className="client-logo-card text-logo">
-                  <span className="client-text-name">Hairdresser</span>
+                <div className="client-logo-card">
+                  <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/qcyoj6k1_HAirDresser%20logo.jpg" alt="Hairdresser" />
                 </div>
-                <div className="client-logo-card text-logo">
-                  <span className="client-text-name">Wisdom Dental Care</span>
+                <div className="client-logo-card">
+                  <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/9dzwk0xo_Wisdom%20dental%20logo.jpg" alt="Wisdom Dental Care" />
                 </div>
               </React.Fragment>
             ))}

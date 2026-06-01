@@ -1507,8 +1507,17 @@ body {
   transition: transform 0.4s ease;
 }
 
+.client-logo-card img.logo-light {
+  filter: brightness(0) invert(1);
+}
+
 .client-logo-card:hover img {
   transform: scale(1.08);
+}
+
+.client-logo-card:hover img.logo-light {
+  transform: scale(1.08);
+  filter: brightness(0) invert(1);
 }
 
 .client-logo-card.text-logo {
