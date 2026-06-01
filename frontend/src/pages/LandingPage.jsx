@@ -54,29 +54,33 @@ const LandingPage = () => {
 
       {/* Navigation */}
       <nav className={`main-nav ${scrollY > 50 ? 'scrolled' : ''}`}>
-        <div className="nav-content">
-          <div className="nav-logo">
-            <img 
-              src="https://customer-assets.emergentagent.com/job_57a2b012-a7de-4c5b-a3dd-5ab2f0d661d8/artifacts/yenqi4ro_BigMotion%20Logo.jpg" 
-              alt="BigMotion Logo" 
-              className="logo-img"
-            />
-          </div>
-          
-          <div className={`nav-links ${isMenuOpen ? 'open' : ''}`}>
-            <a onClick={() => scrollToSection('hero')}>Home</a>
-            <a onClick={() => scrollToSection('services')}>Services</a>
-            <a onClick={() => scrollToSection('process')}>Process</a>
-            <a onClick={() => scrollToSection('about')}>About</a>
-            <a onClick={() => scrollToSection('contact')}>Contact</a>
+        <div className="nav-container">
+          <div className="nav-content">
+            <div className="nav-logo">
+              <img 
+                src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/6b7x4lur_BM%20Logo.jpg" 
+                alt="BigMotion Logo" 
+                className="logo-img"
+              />
+            </div>
+            
+            <div className={`nav-links ${isMenuOpen ? 'open' : ''}`}>
+              <a onClick={() => scrollToSection('hero')}>Home</a>
+              <a onClick={() => scrollToSection('concept')}>Concept</a>
+              <a onClick={() => scrollToSection('services')}>Services</a>
+              <a onClick={() => scrollToSection('process')}>Process</a>
+              <a onClick={() => scrollToSection('about')}>About</a>
+              <a onClick={() => scrollToSection('contact')}>Contact</a>
+            </div>
+            
             <button className="nav-cta" onClick={() => scrollToSection('contact')}>
-              Get Started <ArrowRight size={16} />
+              GET STARTED
+            </button>
+            
+            <button className="menu-toggle" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
-          
-          <button className="menu-toggle" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
         </div>
       </nav>
 
@@ -658,7 +662,7 @@ const LandingPage = () => {
           <div className="footer-top">
             <div className="footer-brand">
               <img 
-                src="https://customer-assets.emergentagent.com/job_57a2b012-a7de-4c5b-a3dd-5ab2f0d661d8/artifacts/yenqi4ro_BigMotion%20Logo.jpg" 
+                src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/6b7x4lur_BM%20Logo.jpg" 
                 alt="BigMotion" 
                 className="footer-logo"
               />
