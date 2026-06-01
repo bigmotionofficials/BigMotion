@@ -69,6 +69,7 @@ const LandingPage = () => {
               <a onClick={() => scrollToSection('hero')}>Home</a>
               <a onClick={() => scrollToSection('concept')}>Concept</a>
               <a onClick={() => scrollToSection('services')}>Services</a>
+              <a onClick={() => scrollToSection('clients')}>Clients</a>
               <a onClick={() => scrollToSection('process')}>Process</a>
               <a onClick={() => scrollToSection('about')}>About</a>
               <a onClick={() => scrollToSection('contact')}>Contact</a>
@@ -284,44 +285,53 @@ const LandingPage = () => {
       {/* Brand Story */}
       <section id="story" className="story-section reveal">
         <div className="section-container">
-          <span className="section-tag">Our Story</span>
-          <h2 className="section-title">FROM LOCAL ROOTS<br />TO DIGITAL POWER</h2>
-          <p className="section-subtitle">
-            We saw businesses struggling to be seen. We built BigMotion to change that — permanently.
-          </p>
-          
-          <div className="timeline">
-            <div className="timeline-item reveal">
-              <div className="timeline-dot" />
-              <div className="timeline-content">
-                <div className="timeline-year">2020</div>
-                <h3>The Problem We Saw</h3>
-                <p>
-                  Local businesses had incredible products and services but zero digital visibility. 
-                  Traditional agencies offered band-aid solutions without real strategy or growth outcomes.
-                </p>
+          <div className="story-grid">
+            <div className="story-visual reveal">
+              <div className="story-image-wrap">
+                <img 
+                  src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&q=80" 
+                  alt="BigMotion Team at Work" 
+                  className="story-image"
+                />
+                <div className="story-image-overlay">
+                  <div className="story-badge">
+                    <div className="story-badge-icon">BM</div>
+                    <div className="story-badge-text">
+                      <span className="story-badge-label">A Digital Powerhouse</span>
+                      <span className="story-badge-sub">Strategy · Creativity · AI</span>
+                    </div>
+                  </div>
+                </div>
               </div>
+              <div className="story-visual-glow" />
             </div>
-            <div className="timeline-item reveal">
-              <div className="timeline-dot" />
-              <div className="timeline-content">
-                <div className="timeline-year">2022</div>
-                <h3>BigMotion Was Born</h3>
-                <p>
-                  We built a team of MBA marketers, creative directors, developers, and AI specialists. 
-                  One mission: turn businesses into powerful digital brands that grow and scale.
-                </p>
-              </div>
-            </div>
-            <div className="timeline-item reveal">
-              <div className="timeline-dot" />
-              <div className="timeline-content">
-                <div className="timeline-year">2024</div>
-                <h3>The Ecosystem Builds</h3>
-                <p>
-                  We launched AI-powered growth systems, integrated CRM automation, and built full 
-                  digital ecosystems for brands — from local startups to national businesses.
-                </p>
+            
+            <div className="story-text reveal">
+              <span className="section-tag">◆ Our Story · Since 2024</span>
+              <h2 className="story-title">
+                FROM LOCAL ROOTS<br />
+                <span className="story-title-italic">TO DIGITAL POWER.</span>
+              </h2>
+              
+              <p className="story-paragraph">
+                We saw ambitious businesses struggling with limited digital visibility in a 
+                fast-moving world where attention drives growth. That led to the birth of 
+                BigMotion — a collective of MBA marketers, creative strategists, developers, 
+                content creators, and AI specialists united by one mission: to transform 
+                businesses into powerful digital brands that grow, scale, and dominate online.
+              </p>
+              
+              <p className="story-paragraph">
+                Today, we build modern digital ecosystems powered by strategy, creativity, 
+                technology, and AI to help brands become market leaders in the digital era.
+              </p>
+              
+              <div className="story-chips">
+                <span className="story-chip">STRATEGY</span>
+                <span className="story-chip">BRANDING</span>
+                <span className="story-chip">CONTENT</span>
+                <span className="story-chip">DEVELOPMENT</span>
+                <span className="story-chip">AI SYSTEMS</span>
               </div>
             </div>
           </div>
@@ -489,6 +499,56 @@ const LandingPage = () => {
               initials="AJ"
             />
           </div>
+        </div>
+      </section>
+
+      {/* Clients & Brands */}
+      <section id="clients" className="clients-section reveal">
+        <div className="section-container">
+          <span className="section-tag">◆ Trusted By Leading Brands</span>
+          <h2 className="section-title">CLIENTS WHO<br />TRUST OUR <span className="story-title-italic">MOTION.</span></h2>
+          <p className="section-subtitle">
+            From national retail giants to passionate local brands — we've helped shape 
+            digital presence and growth for businesses across every industry.
+          </p>
+        </div>
+        
+        <div className="clients-carousel">
+          <div className="clients-track">
+            {[...Array(2)].map((_, idx) => (
+              <React.Fragment key={idx}>
+                <div className="client-logo-card">
+                  <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/dib5e2zt_Titan%20world%20logo.jpg" alt="Titan World" />
+                </div>
+                <div className="client-logo-card">
+                  <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/wl077orw_manyavar-logo.png" alt="Manyavar" />
+                </div>
+                <div className="client-logo-card">
+                  <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/0pigp1fj_BLACKBERRY%20logo.jpg" alt="Blackberrys" />
+                </div>
+                <div className="client-logo-card">
+                  <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/sfwc0076_Titan%20Eye%2B%20logo.jpg" alt="Titan Eye+" />
+                </div>
+                <div className="client-logo-card">
+                  <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/8qpt8nhl_Cake%26Cafe.png" alt="Cake and Cafe" />
+                </div>
+                <div className="client-logo-card text-logo">
+                  <span className="client-text-name">Curls &amp; Café</span>
+                </div>
+                <div className="client-logo-card text-logo">
+                  <span className="client-text-name">BlueWhale Publications</span>
+                </div>
+                <div className="client-logo-card text-logo">
+                  <span className="client-text-name">Hairdresser</span>
+                </div>
+                <div className="client-logo-card text-logo">
+                  <span className="client-text-name">Wisdom Dental Care</span>
+                </div>
+              </React.Fragment>
+            ))}
+          </div>
+          <div className="clients-fade-left" />
+          <div className="clients-fade-right" />
         </div>
       </section>
 
