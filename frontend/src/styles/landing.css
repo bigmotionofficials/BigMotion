@@ -628,10 +628,14 @@ body {
 }
 
 .marquee-item img {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   object-fit: contain;
   flex-shrink: 0;
+}
+
+.marquee-item img.logo-invert {
+  filter: invert(1);
 }
 
 .marquee-item span {

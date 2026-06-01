@@ -213,15 +213,15 @@ const LandingPage = () => {
                 <span>Meta Ads</span>
               </div>
               <div className="marquee-item">
-                <img src="https://cdn.simpleicons.org/google/4285F4" alt="Google Business" />
+                <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/lmpqa7al_image.png" alt="Google Business" />
                 <span>Google Business</span>
               </div>
               <div className="marquee-item">
-                <img src="https://cdn.simpleicons.org/googlemaps/4285F4" alt="Google Maps" />
+                <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/lkx66zkq_image.png" alt="Google Maps" />
                 <span>Google Maps</span>
               </div>
               <div className="marquee-item">
-                <img src="https://cdn.simpleicons.org/openai/FFFFFF" alt="OpenAI" />
+                <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/gu837u62_image.png" alt="OpenAI" className="logo-invert" />
                 <span>OpenAI</span>
               </div>
               <div className="marquee-item">
