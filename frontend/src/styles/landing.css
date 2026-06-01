@@ -66,7 +66,7 @@ body {
 }
 
 .nav-container {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -74,18 +74,25 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 32px;
-  background: rgba(255, 255, 255, 0.08);
+  padding: 14px 32px;
+  background: rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 100px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 24px;
+}
+
+.main-nav.scrolled {
+  padding: 16px 60px;
 }
 
 .main-nav.scrolled .nav-content {
   background: rgba(11, 11, 15, 0.85);
   backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border-color: rgba(255, 255, 255, 0.15);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
 }
@@ -97,7 +104,7 @@ body {
 }
 
 .nav-logo .logo-img {
-  height: 38px;
+  height: 36px;
   width: auto;
   cursor: pointer;
   transition: transform 0.3s ease;
@@ -112,21 +119,20 @@ body {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 48px;
-  flex: 1;
-  justify-content: center;
+  gap: 36px;
 }
 
 .nav-links a {
   color: var(--white);
   text-decoration: none;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.3px;
   transition: all 0.3s ease;
   cursor: pointer;
   position: relative;
-  padding: 8px 0;
+  padding: 6px 0;
+  white-space: nowrap;
 }
 
 .nav-links a::after {
@@ -148,35 +154,16 @@ body {
   width: 100%;
 }
 
-.nav-cta {
-  background: var(--gradient-primary);
-  color: var(--white);
-  border: none;
-  padding: 12px 28px;
-  border-radius: 100px;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
-}
-
-.nav-cta:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.5);
-}
-
 .menu-toggle {
   display: none;
   background: none;
   border: none;
   color: var(--white);
   cursor: pointer;
-  padding: 8px;
+  padding: 4px;
   transition: transform 0.3s ease;
+  align-items: center;
+  justify-content: center;
 }
 
 .menu-toggle:hover {
@@ -2232,6 +2219,22 @@ body {
 
 /* Responsive Design */
 @media (max-width: 1200px) {
+  .main-nav {
+    padding: 20px 32px;
+  }
+  
+  .main-nav.scrolled {
+    padding: 14px 32px;
+  }
+  
+  .nav-links {
+    gap: 28px;
+  }
+  
+  .nav-links a {
+    font-size: 13px;
+  }
+  
   .hero-content {
     gap: 60px;
   }
@@ -2258,32 +2261,41 @@ body {
   }
   
   .main-nav {
-    padding: 16px 32px;
+    padding: 16px 20px;
   }
   
-  .nav-content {
+  .main-nav.scrolled {
     padding: 12px 20px;
   }
   
+  .nav-content {
+    padding: 10px 20px;
+    gap: 12px;
+  }
+  
   .nav-logo .logo-img {
-    height: 32px;
+    height: 30px;
   }
   
   .nav-links {
     position: fixed;
     top: 0;
     right: -100%;
-    width: 70%;
+    width: 80%;
+    max-width: 360px;
     height: 100vh;
     background: rgba(11, 11, 15, 0.98);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     flex-direction: column;
-    padding: 100px 40px;
-    gap: 32px;
+    padding: 100px 32px 40px;
+    gap: 8px;
     transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     border-left: 1px solid rgba(255, 255, 255, 0.1);
     justify-content: flex-start;
+    align-items: flex-start;
     border-radius: 0;
+    overflow-y: auto;
   }
   
   .nav-links.open {
@@ -2294,15 +2306,20 @@ body {
     font-size: 18px;
     width: 100%;
     text-align: left;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
   
-  .nav-cta {
-    width: 100%;
-    justify-content: center;
+  .nav-links a:last-child {
+    border-bottom: none;
+  }
+  
+  .nav-links a::after {
+    display: none;
   }
   
   .menu-toggle {
-    display: block;
+    display: flex;
     z-index: 1001;
   }
   
@@ -2406,6 +2423,27 @@ body {
 }
 
 @media (max-width: 640px) {
+  .main-nav {
+    padding: 12px 14px;
+  }
+  
+  .main-nav.scrolled {
+    padding: 10px 14px;
+  }
+  
+  .nav-content {
+    padding: 10px 16px;
+  }
+  
+  .nav-logo .logo-img {
+    height: 26px;
+  }
+  
+  .nav-links {
+    width: 100%;
+    max-width: none;
+  }
+  
   .hero-title {
     font-size: 40px;
   }
@@ -2443,5 +2481,16 @@ body {
   
   .team-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .client-logo-card {
+    width: 160px;
+    height: 100px;
+    padding: 16px 20px;
+  }
+  
+  .footer-links {
+    grid-template-columns: 1fr;
+    gap: 32px;
   }
 }

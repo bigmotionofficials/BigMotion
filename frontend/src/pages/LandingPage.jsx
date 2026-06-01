@@ -75,10 +75,6 @@ const LandingPage = () => {
               <a onClick={() => scrollToSection('contact')}>Contact</a>
             </div>
             
-            <button className="nav-cta" onClick={() => scrollToSection('contact')}>
-              GET STARTED
-            </button>
-            
             <button className="menu-toggle" onClick={() => setIsMenuOpen(!isMenuOpen)}>
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
