@@ -196,20 +196,42 @@ const LandingPage = () => {
         <div className="marquee-track">
           {[...Array(2)].map((_, idx) => (
             <React.Fragment key={idx}>
-              <div className="marquee-item"><Facebook size={20} /> Meta</div>
-              <div className="marquee-dot">•</div>
-              <div className="marquee-item"><Search size={20} /> Google</div>
-              <div className="marquee-dot">•</div>
-              <div className="marquee-item"><Instagram size={20} /> Instagram</div>
-              <div className="marquee-dot">•</div>
-              <div className="marquee-item"><MessageCircle size={20} /> WhatsApp</div>
-              <div className="marquee-dot">•</div>
-              <div className="marquee-item"><ShoppingCart size={20} /> Shopify</div>
-              <div className="marquee-dot">•</div>
-              <div className="marquee-item"><Youtube size={20} /> YouTube</div>
-              <div className="marquee-dot">•</div>
-              <div className="marquee-item"><Bot size={20} /> OpenAI</div>
-              <div className="marquee-dot">•</div>
+              <div className="marquee-item">
+                <img src="https://cdn.simpleicons.org/facebook/1877F2" alt="Facebook" />
+                <span>Facebook</span>
+              </div>
+              <div className="marquee-item">
+                <img src="https://cdn.simpleicons.org/instagram/E4405F" alt="Instagram" />
+                <span>Instagram</span>
+              </div>
+              <div className="marquee-item">
+                <img src="https://cdn.simpleicons.org/whatsapp/25D366" alt="WhatsApp Business" />
+                <span>WhatsApp Business</span>
+              </div>
+              <div className="marquee-item">
+                <img src="https://cdn.simpleicons.org/meta/0467DF" alt="Meta Ads" />
+                <span>Meta Ads</span>
+              </div>
+              <div className="marquee-item">
+                <img src="https://cdn.simpleicons.org/google/4285F4" alt="Google Business" />
+                <span>Google Business</span>
+              </div>
+              <div className="marquee-item">
+                <img src="https://cdn.simpleicons.org/googlemaps/4285F4" alt="Google Maps" />
+                <span>Google Maps</span>
+              </div>
+              <div className="marquee-item">
+                <img src="https://cdn.simpleicons.org/openai/FFFFFF" alt="OpenAI" />
+                <span>OpenAI</span>
+              </div>
+              <div className="marquee-item">
+                <img src="https://cdn.simpleicons.org/anthropic/D4A27F" alt="Anthropic" />
+                <span>Anthropic</span>
+              </div>
+              <div className="marquee-item">
+                <img src="https://cdn.simpleicons.org/shopify/7AB55C" alt="Shopify" />
+                <span>Shopify</span>
+              </div>
             </React.Fragment>
           ))}
         </div>
