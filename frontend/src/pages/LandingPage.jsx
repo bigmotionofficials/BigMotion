@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { ArrowRight, Play, Target, Sparkles, Video, Zap, TrendingUp, BarChart3, Bot, ShoppingCart, Search, Share2, Phone, Mail, MessageCircle, ChevronRight, Instagram, Facebook, Youtube, Linkedin, Menu, X } from 'lucide-react';
+import { ArrowRight, Play, Target, Sparkles, Video, Zap, TrendingUp, BarChart3, Bot, ShoppingCart, Search, Share2, Phone, Mail, MessageCircle, ChevronRight, Instagram, Facebook, Youtube, Linkedin, Menu, X, Camera, Lightbulb, Rocket, Compass, Palette, Code2, Award } from 'lucide-react';
+import { TextReveal, FadeUp, ScaleIn } from '../components/TextReveal';
 import '../styles/landing.css';
 
 const LandingPage = () => {
@@ -104,48 +105,60 @@ const LandingPage = () => {
         </div>
         
         <div className="hero-content">
-          <div className="hero-left reveal">
-            <div className="hero-badge">
-              <span className="badge-dot" />
-              AI-Powered Digital Agency
-            </div>
+          <div className="hero-left">
+            <FadeUp delay={0}>
+              <div className="hero-badge">
+                <span className="badge-dot" />
+                AI-Powered Digital Agency
+              </div>
+            </FadeUp>
+            
             <h1 className="hero-title">
-              MORE THAN<br />
-              <span className="gradient-text">MARKETING.</span><br />
-              WE BUILD<br />
-              GROWTH SYSTEMS.
+              <TextReveal as="span" className="hero-line">MORE THAN</TextReveal><br />
+              <TextReveal as="span" className="hero-line gradient-text" delay={0.15}>MARKETING.</TextReveal><br />
+              <TextReveal as="span" className="hero-line" delay={0.3}>WE BUILD</TextReveal><br />
+              <TextReveal as="span" className="hero-line" delay={0.45}>GROWTH SYSTEMS.</TextReveal>
             </h1>
-            <p className="hero-subtitle">
-              BigMotion helps businesses build powerful digital identities that attract 
-              attention, build trust, and generate real growth through strategy, branding, 
-              content, technology, and AI-powered systems.
-            </p>
-            <div className="hero-buttons">
-              <button className="btn-primary" onClick={() => scrollToSection('contact')}>
-                <span>Book Free Consultation</span>
-                <ArrowRight size={20} />
-              </button>
-              <button className="btn-secondary" onClick={() => scrollToSection('services')}>
-                Explore Services
-              </button>
-            </div>
-            <div className="hero-stats">
-              <div className="stat-item">
-                <span className="stat-number">200+</span>
-                <span className="stat-label">Creative Assets</span>
+            
+            <FadeUp delay={0.7}>
+              <p className="hero-subtitle">
+                BigMotion helps businesses build powerful digital identities that attract 
+                attention, build trust, and generate real growth through strategy, branding, 
+                content, technology, and AI-powered systems.
+              </p>
+            </FadeUp>
+            
+            <FadeUp delay={0.85}>
+              <div className="hero-buttons">
+                <button className="btn-primary" onClick={() => scrollToSection('contact')}>
+                  <span>Book Free Consultation</span>
+                  <ArrowRight size={20} />
+                </button>
+                <button className="btn-secondary" onClick={() => scrollToSection('services')}>
+                  Explore Services
+                </button>
               </div>
-              <div className="stat-item">
-                <span className="stat-number">10M+</span>
-                <span className="stat-label">Reach Generated</span>
+            </FadeUp>
+            
+            <FadeUp delay={1}>
+              <div className="hero-stats">
+                <div className="stat-item">
+                  <span className="stat-number">200+</span>
+                  <span className="stat-label">Creative Assets</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-number">10M+</span>
+                  <span className="stat-label">Reach Generated</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-number">50+</span>
+                  <span className="stat-label">Brands Scaled</span>
+                </div>
               </div>
-              <div className="stat-item">
-                <span className="stat-number">50+</span>
-                <span className="stat-label">Brands Scaled</span>
-              </div>
-            </div>
+            </FadeUp>
           </div>
           
-          <div className="hero-right reveal">
+          <ScaleIn className="hero-right" delay={0.3}>
             <div className="hero-visual">
               <div className="glow-orb orb-1" />
               <div className="glow-orb orb-2" />
@@ -183,7 +196,7 @@ const LandingPage = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </ScaleIn>
         </div>
       </section>
 
@@ -239,41 +252,68 @@ const LandingPage = () => {
       </div>
 
       {/* Our Concept */}
-      <section id="concept" className="concept-section reveal">
+      <section id="concept" className="concept-section">
         <div className="section-container">
-          <span className="section-tag">Our Concept</span>
-          <h2 className="section-title">NOT JUST AN<br />AGENCY.</h2>
-          <p className="section-subtitle">
-            We combine marketing, technology, AI, branding, and content systems to help 
-            businesses dominate digitally. BigMotion is your complete transformation partner.
-          </p>
+          <FadeUp>
+            <span className="section-tag">◆ Our Concept</span>
+          </FadeUp>
+          <h2 className="section-title">
+            <TextReveal as="span">NOT JUST AN</TextReveal><br/>
+            <TextReveal as="span" className="brand-gradient" delay={0.15}>AGENCY.</TextReveal>
+          </h2>
+          <FadeUp delay={0.3}>
+            <p className="section-subtitle">
+              We combine marketing, technology, AI, branding, and content systems to help 
+              businesses dominate digitally. BigMotion is your complete transformation partner.
+            </p>
+          </FadeUp>
           
           <div className="pillars-grid">
-            <div className="pillar-card reveal">
-              <div className="pillar-icon"><Target size={32} /></div>
-              <h4>Strategy</h4>
-              <p>Data-driven growth roadmaps tailored to your market and ambitions.</p>
-            </div>
-            <div className="pillar-card reveal">
-              <div className="pillar-icon"><Sparkles size={32} /></div>
-              <h4>Branding</h4>
-              <p>Premium identities that command attention and build lasting trust.</p>
-            </div>
-            <div className="pillar-card reveal">
-              <div className="pillar-icon"><Video size={32} /></div>
-              <h4>Content</h4>
-              <p>Cinematic content production — reels, ads, campaigns that convert.</p>
-            </div>
-            <div className="pillar-card reveal">
-              <div className="pillar-icon"><Zap size={32} /></div>
-              <h4>Technology</h4>
-              <p>Websites, apps, CRMs, and AI automation systems that scale.</p>
-            </div>
-            <div className="pillar-card featured reveal">
-              <div className="pillar-icon"><TrendingUp size={32} /></div>
-              <h4>Growth</h4>
-              <p>End-to-end growth systems — funnels, analytics, ads, and conversion optimization working as one unified engine.</p>
-            </div>
+            <FadeUp delay={0.1} className="pillar-card-wrap">
+              <div className="pillar-card">
+                <div className="pillar-glow"></div>
+                <div className="pillar-icon"><Target size={32} /></div>
+                <h4>Strategy</h4>
+                <p>Data-driven growth roadmaps tailored to your market and ambitions.</p>
+                <div className="pillar-arrow"><ArrowRight size={18} /></div>
+              </div>
+            </FadeUp>
+            <FadeUp delay={0.2} className="pillar-card-wrap">
+              <div className="pillar-card">
+                <div className="pillar-glow"></div>
+                <div className="pillar-icon"><Sparkles size={32} /></div>
+                <h4>Branding</h4>
+                <p>Premium identities that command attention and build lasting trust.</p>
+                <div className="pillar-arrow"><ArrowRight size={18} /></div>
+              </div>
+            </FadeUp>
+            <FadeUp delay={0.3} className="pillar-card-wrap">
+              <div className="pillar-card">
+                <div className="pillar-glow"></div>
+                <div className="pillar-icon"><Video size={32} /></div>
+                <h4>Content</h4>
+                <p>Cinematic content production — reels, ads, campaigns that convert.</p>
+                <div className="pillar-arrow"><ArrowRight size={18} /></div>
+              </div>
+            </FadeUp>
+            <FadeUp delay={0.4} className="pillar-card-wrap">
+              <div className="pillar-card">
+                <div className="pillar-glow"></div>
+                <div className="pillar-icon"><Zap size={32} /></div>
+                <h4>Technology</h4>
+                <p>Websites, apps, CRMs, and AI automation systems that scale.</p>
+                <div className="pillar-arrow"><ArrowRight size={18} /></div>
+              </div>
+            </FadeUp>
+            <FadeUp delay={0.5} className="pillar-card-wrap pillar-featured-wrap">
+              <div className="pillar-card featured">
+                <div className="pillar-glow"></div>
+                <div className="pillar-icon"><TrendingUp size={32} /></div>
+                <h4>Growth</h4>
+                <p>End-to-end growth systems — funnels, analytics, ads, and conversion optimization working as one unified engine.</p>
+                <div className="pillar-arrow"><ArrowRight size={18} /></div>
+              </div>
+            </FadeUp>
           </div>
         </div>
       </section>
@@ -335,50 +375,69 @@ const LandingPage = () => {
       </section>
 
       {/* Services */}
-      <section id="services" className="services-section reveal">
+      <section id="services" className="services-section">
         <div className="section-container">
-          <span className="section-tag">Services</span>
-          <h2 className="section-title">EVERYTHING YOU<br />NEED TO DOMINATE.</h2>
-          <p className="section-subtitle">
-            Full-stack digital services engineered for growth — from brand identity to AI automation.
-          </p>
+          <FadeUp>
+            <span className="section-tag">◆ Services</span>
+          </FadeUp>
+          <h2 className="section-title">
+            <TextReveal as="span">EVERYTHING YOU</TextReveal><br />
+            <TextReveal as="span" className="brand-gradient" delay={0.15}>NEED TO DOMINATE.</TextReveal>
+          </h2>
+          <FadeUp delay={0.3}>
+            <p className="section-subtitle">
+              Full-stack digital services engineered for growth — from brand identity to AI automation.
+            </p>
+          </FadeUp>
           
           <div className="services-grid">
             <ServiceCard 
-              icon={<Share2 size={40} />}
+              icon={<Share2 size={32} />}
               title="Digital Presence"
               description="Complete online identity setup — branding, social profiles, Google Business, and WhatsApp Business to make your business undeniable."
               tags={['Branding', 'Social Setup', 'Google Business', 'WhatsApp']}
+              image="https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=600&q=80"
+              delay={0.1}
             />
             <ServiceCard 
-              icon={<Video size={40} />}
+              icon={<Video size={32} />}
               title="Content Production"
               description="Cinematic reels, product shoots, ad creatives, and influencer campaigns that stop the scroll and drive action."
               tags={['Reels', 'Product Shoots', 'Ad Creatives', 'Influencer']}
+              image="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=600&q=80"
+              delay={0.2}
             />
             <ServiceCard 
-              icon={<Zap size={40} />}
+              icon={<Code2 size={32} />}
               title="Development"
               description="High-performance websites, e-commerce stores, mobile apps, AI systems, and custom CRM dashboards built to convert."
               tags={['Websites', 'E-Commerce', 'Mobile Apps', 'AI Systems']}
+              image="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=600&q=80"
+              delay={0.3}
             />
             <ServiceCard 
-              icon={<BarChart3 size={40} />}
+              icon={<BarChart3 size={32} />}
               title="Performance Marketing"
               description="Data-driven Meta Ads, Google Ads, SEO, and precision lead generation systems that turn clicks into customers."
               tags={['Meta Ads', 'Google Ads', 'SEO', 'Lead Generation']}
+              image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80"
+              delay={0.1}
             />
             <ServiceCard 
-              icon={<Bot size={40} />}
+              icon={<Bot size={32} />}
               title="AI & Automation"
               description="Smart automation pipelines, AI chatbots, CRM integrations, and intelligent funnels that work 24/7 to grow your business."
               tags={['Automation', 'AI Bots', 'CRM', 'Funnels']}
+              image="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&q=80"
+              delay={0.2}
             />
             <ServiceCard 
-              icon={<TrendingUp size={40} />}
+              icon={<TrendingUp size={32} />}
               title="Business Growth"
               description="Complete growth ecosystems — analytics dashboards, conversion optimization, A/B testing, and strategic consulting."
               tags={['Analytics', 'Conversion', 'A/B Testing', 'Strategy']}
+              image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80"
+              delay={0.3}
             />
           </div>
         </div>
@@ -413,45 +472,178 @@ const LandingPage = () => {
       </section>
 
       {/* Ecosystem */}
-      <section id="ecosystem" className="ecosystem-section reveal">
+      <section id="ecosystem" className="ecosystem-section">
         <div className="section-container">
-          <span className="section-tag">Digital Ecosystem</span>
-          <h2 className="section-title">EVERYTHING<br />CONNECTED.</h2>
-          <p className="section-subtitle">
-            One unified digital ecosystem powering every channel of your growth.
-          </p>
+          <FadeUp>
+            <span className="section-tag">◆ Digital Ecosystem</span>
+          </FadeUp>
+          <h2 className="section-title">
+            <TextReveal as="span">EVERYTHING</TextReveal><br />
+            <TextReveal as="span" className="brand-gradient" delay={0.15}>CONNECTED.</TextReveal>
+          </h2>
+          <FadeUp delay={0.3}>
+            <p className="section-subtitle">
+              One unified digital ecosystem powering every channel of your growth.
+            </p>
+          </FadeUp>
           
-          <div className="ecosystem-visual">
-            <div className="eco-rings">
-              <div className="eco-ring ring-1" />
-              <div className="eco-ring ring-2" />
-              <div className="eco-ring ring-3" />
+          <ScaleIn delay={0.4}>
+            <div className="ecosystem-visual">
+              <div className="eco-rings">
+                <div className="eco-ring ring-1" />
+                <div className="eco-ring ring-2" />
+                <div className="eco-ring ring-3" />
+              </div>
+              <div className="eco-connection-lines">
+                <svg viewBox="0 0 600 600" className="eco-svg-lines">
+                  <defs>
+                    <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.6"/>
+                      <stop offset="100%" stopColor="#e88dff" stopOpacity="0.6"/>
+                    </linearGradient>
+                  </defs>
+                  <line x1="300" y1="300" x2="300" y2="50" stroke="url(#lineGrad)" strokeWidth="1.5" strokeDasharray="4 4"/>
+                  <line x1="300" y1="300" x2="490" y2="130" stroke="url(#lineGrad)" strokeWidth="1.5" strokeDasharray="4 4"/>
+                  <line x1="300" y1="300" x2="550" y2="300" stroke="url(#lineGrad)" strokeWidth="1.5" strokeDasharray="4 4"/>
+                  <line x1="300" y1="300" x2="490" y2="470" stroke="url(#lineGrad)" strokeWidth="1.5" strokeDasharray="4 4"/>
+                  <line x1="300" y1="300" x2="300" y2="550" stroke="url(#lineGrad)" strokeWidth="1.5" strokeDasharray="4 4"/>
+                  <line x1="300" y1="300" x2="110" y2="470" stroke="url(#lineGrad)" strokeWidth="1.5" strokeDasharray="4 4"/>
+                  <line x1="300" y1="300" x2="50" y2="300" stroke="url(#lineGrad)" strokeWidth="1.5" strokeDasharray="4 4"/>
+                  <line x1="300" y1="300" x2="110" y2="130" stroke="url(#lineGrad)" strokeWidth="1.5" strokeDasharray="4 4"/>
+                </svg>
+              </div>
+              <div className="eco-hub">
+                <div className="eco-hub-inner">
+                  <span className="eco-hub-text">BigMotion</span>
+                  <span className="eco-hub-sub">CORE</span>
+                </div>
+              </div>
+              <div className="eco-node node-1">
+                <div className="eco-node-img">
+                  <img src="https://cdn.simpleicons.org/meta/0467DF" alt="Meta" />
+                </div>
+                <span>Meta Ads</span>
+              </div>
+              <div className="eco-node node-2">
+                <div className="eco-node-img">
+                  <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/6s0xn00v_Google%20Business.png" alt="Google" />
+                </div>
+                <span>Google</span>
+              </div>
+              <div className="eco-node node-3">
+                <div className="eco-node-img">
+                  <img src="https://cdn.simpleicons.org/whatsapp/25D366" alt="WhatsApp" />
+                </div>
+                <span>WhatsApp</span>
+              </div>
+              <div className="eco-node node-4">
+                <div className="eco-node-img">
+                  <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/475sh1cs_instagram%20logo.png" alt="Instagram" />
+                </div>
+                <span>Instagram</span>
+              </div>
+              <div className="eco-node node-5">
+                <div className="eco-node-img">
+                  <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/m9tc1ulu_OpenAI%20logo.png" alt="AI" />
+                </div>
+                <span>AI Auto.</span>
+              </div>
+              <div className="eco-node node-6">
+                <div className="eco-node-img">
+                  <img src="https://cdn.simpleicons.org/shopify/7AB55C" alt="Shopify" />
+                </div>
+                <span>E-Comm.</span>
+              </div>
+              <div className="eco-node node-7">
+                <div className="eco-node-img eco-node-icon-bg">
+                  <BarChart3 size={20} />
+                </div>
+                <span>CRM</span>
+              </div>
+              <div className="eco-node node-8">
+                <div className="eco-node-img">
+                  <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/krfg2rzo_Google%20Map%20Icon.png" alt="SEO" />
+                </div>
+                <span>SEO</span>
+              </div>
             </div>
-            <div className="eco-hub">BigMotion</div>
-            <EcoNode icon={<Facebook size={20} />} label="Meta Ads" position="node-1" />
-            <EcoNode icon={<Search size={20} />} label="Google" position="node-2" />
-            <EcoNode icon={<MessageCircle size={20} />} label="WhatsApp" position="node-3" />
-            <EcoNode icon={<Instagram size={20} />} label="Instagram" position="node-4" />
-            <EcoNode icon={<Bot size={20} />} label="AI Auto." position="node-5" />
-            <EcoNode icon={<ShoppingCart size={20} />} label="E-Comm." position="node-6" />
-            <EcoNode icon={<BarChart3 size={20} />} label="CRM" position="node-7" />
-            <EcoNode icon={<TrendingUp size={20} />} label="SEO" position="node-8" />
-          </div>
+          </ScaleIn>
         </div>
       </section>
 
       {/* Process */}
-      <section id="process" className="process-section reveal">
+      <section id="process" className="process-section">
         <div className="section-container">
-          <span className="section-tag">Our Process</span>
-          <h2 className="section-title">HOW WE BUILD<br />WINNERS.</h2>
+          <FadeUp>
+            <span className="section-tag">◆ Our Process</span>
+          </FadeUp>
+          <h2 className="section-title">
+            <TextReveal as="span">HOW WE BUILD</TextReveal><br />
+            <TextReveal as="span" className="brand-gradient" delay={0.15}>WINNERS.</TextReveal>
+          </h2>
+          <FadeUp delay={0.3}>
+            <p className="section-subtitle">
+              A proven 5-step roadmap that transforms ambitious brands into market leaders.
+            </p>
+          </FadeUp>
           
-          <div className="process-steps">
-            <ProcessStep number="01" title="Discovery" description="Deep-dive into your business, market, competition, and audience to map the real opportunity." />
-            <ProcessStep number="02" title="Strategy" description="We craft a precise growth roadmap — every channel, asset, and campaign planned for maximum ROI." />
-            <ProcessStep number="03" title="Creation" description="Content production, brand development, website/app builds — everything crafted to perfection." />
-            <ProcessStep number="04" title="Launch" description="Simultaneous deployment of campaigns, systems, and platforms for maximum market impact." />
-            <ProcessStep number="05" title="Scale" description="Continuous optimization, A/B testing, and growth hacking to compound results over time." />
+          <div className="process-timeline">
+            <div className="process-line"></div>
+            <FadeUp delay={0.1}>
+              <div className="process-card">
+                <div className="process-card-num">01</div>
+                <div className="process-card-icon">
+                  <Compass size={28} />
+                </div>
+                <h3>Discovery</h3>
+                <p>Deep-dive into your business, market, competition, and audience to map the real opportunity.</p>
+                <div className="process-card-glow"></div>
+              </div>
+            </FadeUp>
+            <FadeUp delay={0.2}>
+              <div className="process-card">
+                <div className="process-card-num">02</div>
+                <div className="process-card-icon">
+                  <Lightbulb size={28} />
+                </div>
+                <h3>Strategy</h3>
+                <p>Craft a precise growth roadmap — every channel, asset, and campaign planned for maximum ROI.</p>
+                <div className="process-card-glow"></div>
+              </div>
+            </FadeUp>
+            <FadeUp delay={0.3}>
+              <div className="process-card">
+                <div className="process-card-num">03</div>
+                <div className="process-card-icon">
+                  <Palette size={28} />
+                </div>
+                <h3>Creation</h3>
+                <p>Content production, brand development, website/app builds — everything crafted to perfection.</p>
+                <div className="process-card-glow"></div>
+              </div>
+            </FadeUp>
+            <FadeUp delay={0.4}>
+              <div className="process-card">
+                <div className="process-card-num">04</div>
+                <div className="process-card-icon">
+                  <Rocket size={28} />
+                </div>
+                <h3>Launch</h3>
+                <p>Simultaneous deployment of campaigns, systems, and platforms for maximum market impact.</p>
+                <div className="process-card-glow"></div>
+              </div>
+            </FadeUp>
+            <FadeUp delay={0.5}>
+              <div className="process-card">
+                <div className="process-card-num">05</div>
+                <div className="process-card-icon">
+                  <Award size={28} />
+                </div>
+                <h3>Scale</h3>
+                <p>Continuous optimization, A/B testing, and growth hacking to compound results over time.</p>
+                <div className="process-card-glow"></div>
+              </div>
+            </FadeUp>
           </div>
         </div>
       </section>
@@ -619,29 +811,94 @@ const LandingPage = () => {
       </section>
 
       {/* Gallery */}
-      <section id="gallery" className="gallery-section reveal">
+      <section id="gallery" className="gallery-section">
         <div className="section-container">
-          <span className="section-tag">Behind The Scenes</span>
-          <h2 className="section-title">THE STUDIO<br />IN ACTION.</h2>
+          <FadeUp>
+            <span className="section-tag">◆ Behind The Scenes</span>
+          </FadeUp>
+          <h2 className="section-title">
+            <TextReveal as="span">THE STUDIO</TextReveal><br />
+            <TextReveal as="span" className="brand-gradient" delay={0.15}>IN ACTION.</TextReveal>
+          </h2>
+          <FadeUp delay={0.3}>
+            <p className="section-subtitle">
+              A glimpse into the creative process — where ideas become campaigns and brands become legacies.
+            </p>
+          </FadeUp>
           
           <div className="gallery-grid">
-            {[
-              { icon: <Video size={48} />, caption: 'Product Shoot Studio', height: 200 },
-              { icon: <Play size={48} />, caption: 'Reel Production', height: 300 },
-              { icon: <Zap size={48} />, caption: 'Dev Lab', height: 160 },
-              { icon: <Target size={48} />, caption: 'Client Strategy Session', height: 250 },
-              { icon: <Sparkles size={48} />, caption: 'Editing Suite', height: 180 },
-              { icon: <TrendingUp size={48} />, caption: 'Drone Campaign Shoot', height: 220 },
-              { icon: <Bot size={48} />, caption: 'Creative Direction', height: 290 },
-              { icon: <BarChart3 size={48} />, caption: 'Campaign Analytics', height: 150 }
-            ].map((item, i) => (
-              <div key={i} className="gallery-item reveal">
-                <div className="gallery-block" style={{ height: `${item.height}px` }}>
-                  {item.icon}
+            <FadeUp delay={0.1} className="gallery-item-wrap gallery-tall">
+              <div className="gallery-item">
+                <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=600&q=80" alt="Studio" />
+                <div className="gallery-overlay">
+                  <span className="gallery-tag">Studio</span>
+                  <h4>Product Shoot Studio</h4>
                 </div>
-                <div className="gallery-caption">{item.caption}</div>
               </div>
-            ))}
+            </FadeUp>
+            <FadeUp delay={0.2} className="gallery-item-wrap">
+              <div className="gallery-item">
+                <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=600&q=80" alt="Camera" />
+                <div className="gallery-overlay">
+                  <span className="gallery-tag">Production</span>
+                  <h4>Reel Production</h4>
+                </div>
+              </div>
+            </FadeUp>
+            <FadeUp delay={0.3} className="gallery-item-wrap">
+              <div className="gallery-item">
+                <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&q=80" alt="Dev Lab" />
+                <div className="gallery-overlay">
+                  <span className="gallery-tag">Development</span>
+                  <h4>Dev Lab</h4>
+                </div>
+              </div>
+            </FadeUp>
+            <FadeUp delay={0.4} className="gallery-item-wrap gallery-tall">
+              <div className="gallery-item">
+                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&q=80" alt="Strategy" />
+                <div className="gallery-overlay">
+                  <span className="gallery-tag">Strategy</span>
+                  <h4>Client Sessions</h4>
+                </div>
+              </div>
+            </FadeUp>
+            <FadeUp delay={0.15} className="gallery-item-wrap">
+              <div className="gallery-item">
+                <img src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=600&q=80" alt="Editing" />
+                <div className="gallery-overlay">
+                  <span className="gallery-tag">Post Production</span>
+                  <h4>Editing Suite</h4>
+                </div>
+              </div>
+            </FadeUp>
+            <FadeUp delay={0.25} className="gallery-item-wrap">
+              <div className="gallery-item">
+                <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=600&q=80" alt="Drone" />
+                <div className="gallery-overlay">
+                  <span className="gallery-tag">Cinematic</span>
+                  <h4>Drone Shoots</h4>
+                </div>
+              </div>
+            </FadeUp>
+            <FadeUp delay={0.35} className="gallery-item-wrap gallery-tall">
+              <div className="gallery-item">
+                <img src="https://images.unsplash.com/photo-1561070791-2526d30994b8?w=600&q=80" alt="Creative" />
+                <div className="gallery-overlay">
+                  <span className="gallery-tag">Creative</span>
+                  <h4>Direction Lab</h4>
+                </div>
+              </div>
+            </FadeUp>
+            <FadeUp delay={0.45} className="gallery-item-wrap">
+              <div className="gallery-item">
+                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80" alt="Analytics" />
+                <div className="gallery-overlay">
+                  <span className="gallery-tag">Analytics</span>
+                  <h4>Campaign Metrics</h4>
+                </div>
+              </div>
+            </FadeUp>
           </div>
         </div>
       </section>
@@ -797,17 +1054,23 @@ const LandingPage = () => {
 };
 
 // Component Helpers
-const ServiceCard = ({ icon, title, description, tags }) => (
-  <div className="service-card reveal">
-    <div className="service-icon">{icon}</div>
-    <h3>{title}</h3>
-    <p>{description}</p>
-    <div className="service-tags">
-      {tags.map((tag, i) => (
-        <span key={i} className="service-tag">{tag}</span>
-      ))}
+const ServiceCard = ({ icon, title, description, tags, image, delay = 0 }) => (
+  <FadeUp delay={delay} className="service-card-wrap">
+    <div className="service-card">
+      <div className="service-card-bg" style={{ backgroundImage: `url(${image})` }}></div>
+      <div className="service-card-content">
+        <div className="service-icon">{icon}</div>
+        <h3>{title}</h3>
+        <p>{description}</p>
+        <div className="service-tags">
+          {tags.map((tag, i) => (
+            <span key={i} className="service-tag">{tag}</span>
+          ))}
+        </div>
+        <div className="service-arrow"><ArrowRight size={18} /></div>
+      </div>
     </div>
-  </div>
+  </FadeUp>
 );
 
 const ProcessStep = ({ number, title, description }) => (
