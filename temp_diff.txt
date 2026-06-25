@@ -1,0 +1,1142 @@
+﻿diff --git a/backend/requirements.txt b/backend/requirements.txt
+deleted file mode 100644
+index ede317a..0000000
+--- a/backend/requirements.txt
++++ /dev/null
+@@ -1,27 +0,0 @@
+-fastapi==0.110.1
+-uvicorn==0.25.0
+-boto3>=1.34.129
+-requests-oauthlib>=2.0.0
+-cryptography>=42.0.8
+-python-dotenv>=1.0.1
+-pymongo==4.5.0
+-pydantic>=2.6.4
+-email-validator>=2.2.0
+-pyjwt>=2.10.1
+-bcrypt==4.1.3
+-passlib>=1.7.4
+-tzdata>=2024.2
+-motor==3.3.1
+-pytest>=8.0.0
+-black>=24.1.1
+-isort>=5.13.2
+-flake8>=7.0.0
+-mypy>=1.8.0
+-python-jose>=3.3.0
+-requests>=2.31.0
+-pandas>=2.2.0
+-numpy>=1.26.0
+-python-multipart>=0.0.9
+-jq>=1.6.0
+-typer>=0.9.0
+-emergentintegrations==0.1.2
+diff --git a/backend/server.py b/backend/server.py
+deleted file mode 100644
+index 9ed97af..0000000
+--- a/backend/server.py
++++ /dev/null
+@@ -1,89 +0,0 @@
+-from fastapi import FastAPI, APIRouter
+-from dotenv import load_dotenv
+-from starlette.middleware.cors import CORSMiddleware
+-from motor.motor_asyncio import AsyncIOMotorClient
+-import os
+-import logging
+-from pathlib import Path
+-from pydantic import BaseModel, Field, ConfigDict
+-from typing import List
+-import uuid
+-from datetime import datetime, timezone
+-
+-
+-ROOT_DIR = Path(__file__).parent
+-load_dotenv(ROOT_DIR / '.env')
+-
+-# MongoDB connection
+-mongo_url = os.environ['MONGO_URL']
+-client = AsyncIOMotorClient(mongo_url)
+-db = client[os.environ['DB_NAME']]
+-
+-# Create the main app without a prefix
+-app = FastAPI()
+-
+-# Create a router with the /api prefix
+-api_router = APIRouter(prefix="/api")
+-
+-
+-# Define Models
+-class StatusCheck(BaseModel):
+-    model_config = ConfigDict(extra="ignore")  # Ignore MongoDB's _id field
+-    
+-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+-    client_name: str
+-    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+-
+-class StatusCheckCreate(BaseModel):
+-    client_name: str
+-
+-# Add your routes to the router instead of directly to app
+-@api_router.get("/")
+-async def root():
+-    return {"message": "Hello World"}
+-
+-@api_router.post("/status", response_model=StatusCheck)
+-async def create_status_check(input: StatusCheckCreate):
+-    status_dict = input.model_dump()
+-    status_obj = StatusCheck(**status_dict)
+-    
+-    # Convert to dict and serialize datetime to ISO string for MongoDB
+-    doc = status_obj.model_dump()
+-    doc['timestamp'] = doc['timestamp'].isoformat()
+-    
+-    _ = await db.status_checks.insert_one(doc)
+-    return status_obj
+-
+-@api_router.get("/status", response_model=List[StatusCheck])
+-async def get_status_checks():
+-    # Exclude MongoDB's _id field from the query results
+-    status_checks = await db.status_checks.find({}, {"_id": 0}).to_list(1000)
+-    
+-    # Convert ISO string timestamps back to datetime objects
+-    for check in status_checks:
+-        if isinstance(check['timestamp'], str):
+-            check['timestamp'] = datetime.fromisoformat(check['timestamp'])
+-    
+-    return status_checks
+-
+-# Include the router in the main app
+-app.include_router(api_router)
+-
+-app.add_middleware(
+-    CORSMiddleware,
+-    allow_credentials=True,
+-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
+-    allow_methods=["*"],
+-    allow_headers=["*"],
+-)
+-
+-# Configure logging
+-logging.basicConfig(
+-    level=logging.INFO,
+-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+-)
+-logger = logging.getLogger(__name__)
+-
+-@app.on_event("shutdown")
+-async def shutdown_db_client():
+-    client.close()
+\ No newline at end of file
+diff --git a/frontend/package.json b/frontend/package.json
+index 8a4f807..a95911b 100644
+--- a/frontend/package.json
++++ b/frontend/package.json
+@@ -83,6 +83,7 @@
+     "@emergentbase/visual-edits": "https://assets.emergent.sh/npm/emergentbase-visual-edits-1.0.8.tgz",
+     "@eslint/js": "9.23.0",
+     "@types/lodash": "4.17.24",
++    "ajv": "^8.20.0",
+     "autoprefixer": "10.4.20",
+     "dotenv": "16.4.5",
+     "eslint": "9.23.0",
+diff --git a/frontend/src/pages/LandingPage.jsx b/frontend/src/pages/LandingPage.jsx
+index bb0d3e2..edbf165 100644
+--- a/frontend/src/pages/LandingPage.jsx
++++ b/frontend/src/pages/LandingPage.jsx
+@@ -109,7 +109,7 @@ const LandingPage = () => {
+             <FadeUp delay={0}>
+               <div className="hero-badge">
+                 <span className="badge-dot" />
+-                AI-Powered Digital Agency
++                Digital Growth ÔÇó AI Systems ÔÇó Branding ÔÇó Technology
+               </div>
+             </FadeUp>
+             
+@@ -117,27 +117,28 @@ const LandingPage = () => {
+               <TextReveal as="span" className="hero-line">MORE THAN</TextReveal><br />
+               <TextReveal as="span" className="hero-line gradient-text" delay={0.15}>MARKETING.</TextReveal><br />
+               <TextReveal as="span" className="hero-line" delay={0.3}>WE BUILD</TextReveal><br />
+-              <TextReveal as="span" className="hero-line" delay={0.45}>GROWTH SYSTEMS.</TextReveal>
++              <TextReveal as="span" className="hero-line gradient-text" delay={0.45}>BUSINESSES IN MOTION.</TextReveal>
+             </h1>
+             
+             <FadeUp delay={0.7}>
+               <p className="hero-subtitle">
+-                BigMotion helps businesses build powerful digital identities that attract 
+-                attention, build trust, and generate real growth through strategy, branding, 
+-                content, technology, and AI-powered systems.
++                BigMotion helps businesses build powerful digital identities that attract attention, build trust, and generate measurable growth through strategy, branding, content, technology, and AI-powered systems.
+               </p>
+             </FadeUp>
+             
+             <FadeUp delay={0.85}>
+               <div className="hero-buttons">
+                 <button className="btn-primary" onClick={() => scrollToSection('contact')}>
+-                  <span>Book Free Consultation</span>
++                  <span>Book a Free Strategy Call</span>
+                   <ArrowRight size={20} />
+                 </button>
+                 <button className="btn-secondary" onClick={() => scrollToSection('services')}>
+-                  Explore Services
++                  Explore Our Services
+                 </button>
+               </div>
++              <p className="hero-trust-text">
++                Trusted by ambitious brands, startups, local businesses, and growing enterprises.
++              </p>
+             </FadeUp>
+             
+             <FadeUp delay={1}>
+@@ -202,49 +203,57 @@ const LandingPage = () => {
+ 
+       {/* Brand Marquee */}
+       <div className="marquee-section">
+-        <div className="marquee-label">Tools & Platforms We Work With</div>
++        <div className="section-container marquee-header" style={{ marginBottom: '40px', textAlign: 'center' }}>
++          <h2 className="section-title">
++            <TextReveal as="span">TRUSTED PLATFORMS & </TextReveal>
++            <TextReveal as="span" className="brand-gradient" delay={0.15}>TECHNOLOGIES</TextReveal>
++          </h2>
++          <p className="section-subtitle" style={{ margin: '0 auto' }}>
++            We leverage the world's most powerful platforms to help businesses scale faster.
++          </p>
++        </div>
+         <div className="marquee-track">
+           {[...Array(2)].map((_, idx) => (
+             <React.Fragment key={idx}>
+               <div className="marquee-item">
+-                <img src="https://cdn.simpleicons.org/facebook/1877F2" alt="Facebook" />
+-                <span>Facebook</span>
++                <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/6s0xn00v_Google%20Business.png" alt="Google" />
++                <span>Google</span>
+               </div>
+               <div className="marquee-item">
+-                <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/475sh1cs_instagram%20logo.png" alt="Instagram" />
+-                <span>Instagram</span>
++                <img src="https://cdn.simpleicons.org/meta/0467DF" alt="Meta" />
++                <span>Meta</span>
+               </div>
+               <div className="marquee-item">
+-                <img src="https://cdn.simpleicons.org/whatsapp/25D366" alt="WhatsApp Business" />
+-                <span>WhatsApp Business</span>
++                <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/475sh1cs_instagram%20logo.png" alt="Instagram" />
++                <span>Instagram</span>
+               </div>
+               <div className="marquee-item">
+-                <img src="https://cdn.simpleicons.org/meta/0467DF" alt="Meta Ads" />
+-                <span>Meta Ads</span>
++                <img src="https://cdn.simpleicons.org/whatsapp/25D366" alt="WhatsApp" />
++                <span>WhatsApp</span>
+               </div>
+               <div className="marquee-item">
+-                <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/6s0xn00v_Google%20Business.png" alt="Google Business" />
+-                <span>Google Business</span>
++                <img src="https://cdn.simpleicons.org/youtube/FF0000" alt="YouTube" />
++                <span>YouTube</span>
+               </div>
+               <div className="marquee-item">
+-                <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/krfg2rzo_Google%20Map%20Icon.png" alt="Google Maps" />
+-                <span>Google Maps</span>
++                <img src="https://cdn.simpleicons.org/shopify/7AB55C" alt="Shopify" />
++                <span>Shopify</span>
+               </div>
+               <div className="marquee-item">
+-                <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/uuprez1t_linkedin%20icon.png" alt="LinkedIn" />
+-                <span>LinkedIn</span>
++                <img src="https://cdn.simpleicons.org/wordpress/21759B" alt="WordPress" />
++                <span>WordPress</span>
+               </div>
+               <div className="marquee-item">
+                 <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/m9tc1ulu_OpenAI%20logo.png" alt="OpenAI" />
+                 <span>OpenAI</span>
+               </div>
+               <div className="marquee-item">
+-                <img src="https://cdn.simpleicons.org/anthropic/D4A27F" alt="Anthropic" />
+-                <span>Anthropic</span>
++                <img src="https://customer-assets.emergentagent.com/job_growth-engine-283/artifacts/uuprez1t_linkedin%20icon.png" alt="LinkedIn" />
++                <span>LinkedIn</span>
+               </div>
+               <div className="marquee-item">
+-                <img src="https://cdn.simpleicons.org/shopify/7AB55C" alt="Shopify" />
+-                <span>Shopify</span>
++                <img src="https://cdn.simpleicons.org/razorpay/008ECF" alt="Razorpay" />
++                <span>Razorpay</span>
+               </div>
+             </React.Fragment>
+           ))}
+@@ -255,17 +264,24 @@ const LandingPage = () => {
+       <section id="concept" className="concept-section">
+         <div className="section-container">
+           <FadeUp>
+-            <span className="section-tag">Ôùå Our Concept</span>
++            <span className="section-tag">OUR CONCEPT</span>
+           </FadeUp>
+           <h2 className="section-title">
+-            <TextReveal as="span">NOT JUST AN</TextReveal><br/>
+-            <TextReveal as="span" className="brand-gradient" delay={0.15}>AGENCY.</TextReveal>
++            <TextReveal as="span">BUILDING DIGITAL ECOSYSTEMS,</TextReveal><br/>
++            <TextReveal as="span" className="brand-gradient" delay={0.15}>NOT JUST MARKETING CAMPAIGNS.</TextReveal>
+           </h2>
+           <FadeUp delay={0.3}>
+-            <p className="section-subtitle">
+-              We combine marketing, technology, AI, branding, and content systems to help 
+-              businesses dominate digitally. BigMotion is your complete transformation partner.
+-            </p>
++            <div className="section-subtitle" style={{ maxWidth: '800px' }}>
++              <p style={{ marginBottom: '16px' }}>
++                Most agencies focus on individual services. We focus on building complete growth ecosystems.
++              </p>
++              <p style={{ marginBottom: '16px' }}>
++                At BigMotion, we combine strategy, branding, content creation, technology, AI automation, and performance marketing to create systems that consistently attract customers, build authority, and drive business growth.
++              </p>
++              <p style={{ fontWeight: '600', color: 'var(--white)' }}>
++                We don't sell services. We build growth engines.
++              </p>
++            </div>
+           </FadeUp>
+           
+           <div className="pillars-grid">
+@@ -274,16 +290,16 @@ const LandingPage = () => {
+                 <div className="pillar-glow"></div>
+                 <div className="pillar-icon"><Target size={32} /></div>
+                 <h4>Strategy</h4>
+-                <p>Data-driven growth roadmaps tailored to your market and ambitions.</p>
++                <p>Data-driven planning that aligns every action with business goals.</p>
+                 <div className="pillar-arrow"><ArrowRight size={18} /></div>
+               </div>
+             </FadeUp>
+             <FadeUp delay={0.2} className="pillar-card-wrap">
+               <div className="pillar-card">
+                 <div className="pillar-glow"></div>
+-                <div className="pillar-icon"><Sparkles size={32} /></div>
++                <div className="pillar-icon"><Palette size={32} /></div>
+                 <h4>Branding</h4>
+-                <p>Premium identities that command attention and build lasting trust.</p>
++                <p>Creating memorable identities that customers trust and remember.</p>
+                 <div className="pillar-arrow"><ArrowRight size={18} /></div>
+               </div>
+             </FadeUp>
+@@ -292,16 +308,16 @@ const LandingPage = () => {
+                 <div className="pillar-glow"></div>
+                 <div className="pillar-icon"><Video size={32} /></div>
+                 <h4>Content</h4>
+-                <p>Cinematic content production ÔÇö reels, ads, campaigns that convert.</p>
++                <p>High-quality content designed to attract attention and build engagement.</p>
+                 <div className="pillar-arrow"><ArrowRight size={18} /></div>
+               </div>
+             </FadeUp>
+             <FadeUp delay={0.4} className="pillar-card-wrap">
+               <div className="pillar-card">
+                 <div className="pillar-glow"></div>
+-                <div className="pillar-icon"><Zap size={32} /></div>
++                <div className="pillar-icon"><Code2 size={32} /></div>
+                 <h4>Technology</h4>
+-                <p>Websites, apps, CRMs, and AI automation systems that scale.</p>
++                <p>Websites, apps, automations, and systems that improve productivity and customer experience.</p>
+                 <div className="pillar-arrow"><ArrowRight size={18} /></div>
+               </div>
+             </FadeUp>
+@@ -310,7 +326,7 @@ const LandingPage = () => {
+                 <div className="pillar-glow"></div>
+                 <div className="pillar-icon"><TrendingUp size={32} /></div>
+                 <h4>Growth</h4>
+-                <p>End-to-end growth systems ÔÇö funnels, analytics, ads, and conversion optimization working as one unified engine.</p>
++                <p>Performance-focused execution that generates measurable business outcomes.</p>
+                 <div className="pillar-arrow"><ArrowRight size={18} /></div>
+               </div>
+             </FadeUp>
+@@ -343,23 +359,18 @@ const LandingPage = () => {
+             </div>
+             
+             <div className="story-text reveal">
+-              <span className="section-tag">Ôùå Our Story ┬À Since 2024</span>
++              <span className="section-tag">OUR STORY</span>
+               <h2 className="story-title">
+                 FROM LOCAL ROOTS<br />
+-                <span className="story-title-italic">TO DIGITAL POWER.</span>
++                <span className="story-title-italic">TO DIGITAL LEADERSHIP.</span>
+               </h2>
+               
+               <p className="story-paragraph">
+-                We saw ambitious businesses struggling with limited digital visibility in a 
+-                fast-moving world where attention drives growth. That led to the birth of 
+-                BigMotion ÔÇö a collective of MBA marketers, creative strategists, developers, 
+-                content creators, and AI specialists united by one mission: to transform 
+-                businesses into powerful digital brands that grow, scale, and dominate online.
++                We saw ambitious businesses struggling with limited digital visibility in a fast-moving world where attention drives growth. That led to the birth of BigMotion ÔÇö a collective of MBA marketers, creative strategists, developers, content creators, and AI specialists united by one mission: to transform businesses into powerful digital brands that grow, scale, and dominate online.
+               </p>
+               
+               <p className="story-paragraph">
+-                Today, we build modern digital ecosystems powered by strategy, creativity, 
+-                technology, and AI to help brands become market leaders in the digital era.
++                Today, we build modern digital ecosystems powered by strategy, creativity, technology, and AI to help brands become market leaders in the digital era.
+               </p>
+               
+               <div className="story-chips">
+@@ -374,15 +385,14 @@ const LandingPage = () => {
+         </div>
+       </section>
+ 
+-      {/* Services */}
+       <section id="services" className="services-section">
+         <div className="section-container">
+           <FadeUp>
+-            <span className="section-tag">Ôùå Services</span>
++            <span className="section-tag">SERVICES</span>
+           </FadeUp>
+           <h2 className="section-title">
+-            <TextReveal as="span">EVERYTHING YOU</TextReveal><br />
+-            <TextReveal as="span" className="brand-gradient" delay={0.15}>NEED TO DOMINATE.</TextReveal>
++            <TextReveal as="span">EVERYTHING YOUR BUSINESS NEEDS</TextReveal><br />
++            <TextReveal as="span" className="brand-gradient" delay={0.15}>TO SCALE DIGITALLY.</TextReveal>
+           </h2>
+           <FadeUp delay={0.3}>
+             <p className="section-subtitle">
+@@ -394,51 +404,43 @@ const LandingPage = () => {
+             <ServiceCard 
+               icon={<Share2 size={32} />}
+               title="Digital Presence"
+-              description="Complete online identity setup ÔÇö branding, social profiles, Google Business, and WhatsApp Business to make your business undeniable."
+-              tags={['Branding', 'Social Setup', 'Google Business', 'WhatsApp']}
++              description="Build a strong and professional online identity that customers trust."
++              tags={['Brand Identity', 'Social Media Setup', 'Google Business Profile', 'WhatsApp Business', 'Professional Email Setup', 'Business Profiles']}
+               image="https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=600&q=80"
+               delay={0.1}
+             />
+             <ServiceCard 
+               icon={<Video size={32} />}
+               title="Content Production"
+-              description="Cinematic reels, product shoots, ad creatives, and influencer campaigns that stop the scroll and drive action."
+-              tags={['Reels', 'Product Shoots', 'Ad Creatives', 'Influencer']}
++              description="Content that grabs attention and drives engagement."
++              tags={['Reel Production', 'Commercial Shoots', 'Product Photography', 'Influencer Collaborations', 'Video Editing', 'Creative Campaigns']}
+               image="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=600&q=80"
+               delay={0.2}
+             />
+             <ServiceCard 
+               icon={<Code2 size={32} />}
+-              title="Development"
+-              description="High-performance websites, e-commerce stores, mobile apps, AI systems, and custom CRM dashboards built to convert."
+-              tags={['Websites', 'E-Commerce', 'Mobile Apps', 'AI Systems']}
++              title="Website & App Development"
++              description="Technology solutions designed around your business goals."
++              tags={['Business Websites', 'E-Commerce Stores', 'Mobile Applications', 'CRM Systems', 'Custom Software', 'Landing Pages']}
+               image="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=600&q=80"
+               delay={0.3}
+             />
+             <ServiceCard 
+               icon={<BarChart3 size={32} />}
+-              title="Performance Marketing"
+-              description="Data-driven Meta Ads, Google Ads, SEO, and precision lead generation systems that turn clicks into customers."
+-              tags={['Meta Ads', 'Google Ads', 'SEO', 'Lead Generation']}
++              title="Digital Marketing"
++              description="Performance-focused marketing designed to generate leads and sales."
++              tags={['Meta Ads', 'Google Ads', 'Search Engine Optimization', 'Lead Generation', 'Funnel Development', 'Retargeting Campaigns']}
+               image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80"
+               delay={0.1}
+             />
+             <ServiceCard 
+               icon={<Bot size={32} />}
+               title="AI & Automation"
+-              description="Smart automation pipelines, AI chatbots, CRM integrations, and intelligent funnels that work 24/7 to grow your business."
+-              tags={['Automation', 'AI Bots', 'CRM', 'Funnels']}
++              description="Modern systems that improve efficiency and productivity."
++              tags={['AI Chatbots', 'CRM Automation', 'WhatsApp Automation', 'Workflow Automation', 'AI Integrations', 'Business Intelligence Dashboards']}
+               image="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&q=80"
+               delay={0.2}
+             />
+-            <ServiceCard 
+-              icon={<TrendingUp size={32} />}
+-              title="Business Growth"
+-              description="Complete growth ecosystems ÔÇö analytics dashboards, conversion optimization, A/B testing, and strategic consulting."
+-              tags={['Analytics', 'Conversion', 'A/B Testing', 'Strategy']}
+-              image="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80"
+-              delay={0.3}
+-            />
+           </div>
+         </div>
+       </section>
+@@ -446,10 +448,13 @@ const LandingPage = () => {
+       {/* Content Showcase */}
+       <section id="showcase" className="showcase-section reveal">
+         <div className="section-container">
+-          <span className="section-tag">Content Showcase</span>
+-          <h2 className="section-title">CONTENT THAT<br />CONVERTS.</h2>
++          <span className="section-tag">OUR WORK</span>
++          <h2 className="section-title">
++            <TextReveal as="span">CONTENT THAT CAPTURES</TextReveal><br />
++            <TextReveal as="span" className="brand-gradient" delay={0.15}>ATTENTION.</TextReveal>
++          </h2>
+           <p className="section-subtitle">
+-            Cinematic content built for attention, engagement, and results across every platform.
++            From viral reels and commercial shoots to product campaigns and social storytelling, our content is designed to stop the scroll, build trust, and drive action.
+           </p>
+         </div>
+         
+@@ -475,15 +480,15 @@ const LandingPage = () => {
+       <section id="ecosystem" className="ecosystem-section">
+         <div className="section-container">
+           <FadeUp>
+-            <span className="section-tag">Ôùå Digital Ecosystem</span>
++            <span className="section-tag">DIGITAL ECOSYSTEM</span>
+           </FadeUp>
+           <h2 className="section-title">
+-            <TextReveal as="span">EVERYTHING</TextReveal><br />
+-            <TextReveal as="span" className="brand-gradient" delay={0.15}>CONNECTED.</TextReveal>
++            <TextReveal as="span">CONNECTED SYSTEMS.</TextReveal><br />
++            <TextReveal as="span" className="brand-gradient" delay={0.15}>SMARTER GROWTH.</TextReveal>
+           </h2>
+           <FadeUp delay={0.3}>
+             <p className="section-subtitle">
+-              One unified digital ecosystem powering every channel of your growth.
++              Every successful business operates through connected systems. We integrate marketing, sales, communication, analytics, automation, and customer engagement into one powerful ecosystem.
+             </p>
+           </FadeUp>
+           
+@@ -568,6 +573,147 @@ const LandingPage = () => {
+               </div>
+             </div>
+           </ScaleIn>
++
++          <FadeUp delay={0.5}>
++            <div className="ecosystem-features-grid" style={{
++              display: 'grid',
++              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
++              gap: '20px',
++              width: '100%',
++              maxWidth: '1000px',
++              marginTop: '65px',
++              textAlign: 'left'
++            }}>
++              {[
++                'Google Business Optimization',
++                'Meta Advertising',
++                'Google Advertising',
++                'WhatsApp Business Integration',
++                'CRM Integration',
++                'SEO Optimization',
++                'Analytics & Reporting',
++                'AI Automation',
++                'E-Commerce Solutions'
++              ].map((feat, i) => (
++                <div key={i} className="eco-feat-card" style={{
++                  background: 'rgba(255, 255, 255, 0.03)',
++                  border: '1px solid rgba(255, 255, 255, 0.08)',
++                  padding: '16px 24px',
++                  borderRadius: '12px',
++                  display: 'flex',
++                  alignItems: 'center',
++                  gap: '12px',
++                  transition: 'all 0.3s ease'
++                }}>
++                  <div style={{
++                    width: '8px',
++                    height: '8px',
++                    borderRadius: '50%',
++                    background: 'var(--gradient-primary)',
++                    boxShadow: '0 0 10px rgba(232, 141, 255, 0.8)'
++                  }} />
++                  <span style={{ fontSize: '15px', fontWeight: '600', color: 'var(--white)' }}>{feat}</span>
++                </div>
++              ))}
++            </div>
++          </FadeUp>
++        </div>
++      </section>
++
++      {/* Why BigMotion */}
++      <section id="why" className="why-section reveal" style={{ padding: '140px 60px', position: 'relative', overflow: 'hidden' }}>
++        <div className="section-container">
++          <FadeUp>
++            <span className="section-tag">WHY BIGMOTION</span>
++          </FadeUp>
++          <h2 className="section-title">
++            <TextReveal as="span">BUILT FOR BUSINESSES</TextReveal><br />
++            <TextReveal as="span" className="brand-gradient" delay={0.15}>THAT WANT MORE.</TextReveal>
++          </h2>
++          <FadeUp delay={0.3}>
++            <p className="section-subtitle" style={{ marginBottom: '60px' }}>
++              We're not another marketing agency. We are growth partners focused on helping businesses create sustainable digital success through strategy, creativity, technology, and execution.
++            </p>
++          </FadeUp>
++
++          <div className="why-grid" style={{
++            display: 'grid',
++            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
++            gap: '24px',
++            width: '100%',
++            marginTop: '40px'
++          }}>
++            {[
++              {
++                title: 'Growth-Focused Approach',
++                description: 'We align every strategy and action directly with your revenue and business goals, not just vanity metrics.'
++              },
++              {
++                title: 'AI-Powered Solutions',
++                description: 'We build smart CRM automations, chatbots, and systems to streamline operations and run your growth 24/7.'
++              },
++              {
++                title: 'Dedicated Expert Team',
++                description: 'Get direct access to seasoned MBA marketers, creative directors, developers, and AI engineers working as one.'
++              },
++              {
++                title: 'Complete Digital Ecosystem',
++                description: 'No fragmented efforts. We build fully connected networks linking your marketing, sales, systems, and content.'
++              },
++              {
++                title: 'Transparent Reporting',
++                description: 'Honest data, real conversion tracking, and regular walkthroughs. You always know exactly where your investment goes.'
++              },
++              {
++                title: 'Long-Term Partnership',
++                description: 'We succeed when you succeed. We act as extension of your team, driving constant optimization and momentum.'
++              }
++            ].map((point, i) => (
++              <FadeUp key={i} delay={i * 0.1}>
++                <div className="why-card" style={{
++                  background: 'rgba(255, 255, 255, 0.02)',
++                  border: '1px solid rgba(255, 255, 255, 0.08)',
++                  padding: '40px 32px',
++                  borderRadius: '24px',
++                  position: 'relative',
++                  overflow: 'hidden',
++                  transition: 'all 0.4s ease',
++                  height: '100%'
++                }}>
++                  <div className="why-card-glow" style={{
++                    position: 'absolute',
++                    top: '-50%',
++                    left: '-50%',
++                    width: '200%',
++                    height: '200%',
++                    background: 'radial-gradient(circle, rgba(59, 130, 246, 0.05) 0%, transparent 60%)',
++                    pointerEvents: 'none'
++                  }} />
++                  <div style={{
++                    width: '48px',
++                    height: '48px',
++                    borderRadius: '16px',
++                    background: 'var(--gradient-primary)',
++                    display: 'flex',
++                    alignItems: 'center',
++                    justifyContent: 'center',
++                    color: 'var(--white)',
++                    marginBottom: '24px',
++                    fontWeight: 'bold',
++                    fontSize: '18px'
++                  }}>
++                    0{i+1}
++                  </div>
++                  <h4 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '12px', color: 'var(--white)' }}>
++                    {point.title}
++                  </h4>
++                  <p style={{ fontSize: '14px', lineHeight: '1.6', color: 'var(--gray)' }}>
++                    {point.description}
++                  </p>
++                </div>
++              </FadeUp>
++            ))}
++          </div>
+         </div>
+       </section>
+ 
+@@ -575,11 +721,11 @@ const LandingPage = () => {
+       <section id="process" className="process-section">
+         <div className="section-container">
+           <FadeUp>
+-            <span className="section-tag">Ôùå Our Process</span>
++            <span className="section-tag">OUR PROCESS</span>
+           </FadeUp>
+           <h2 className="section-title">
+-            <TextReveal as="span">HOW WE BUILD</TextReveal><br />
+-            <TextReveal as="span" className="brand-gradient" delay={0.15}>WINNERS.</TextReveal>
++            <TextReveal as="span">HOW WE CREATE</TextReveal><br />
++            <TextReveal as="span" className="brand-gradient" delay={0.15}>MOMENTUM.</TextReveal>
+           </h2>
+           <FadeUp delay={0.3}>
+             <p className="section-subtitle">
+@@ -595,8 +741,8 @@ const LandingPage = () => {
+                 <div className="process-card-icon">
+                   <Compass size={28} />
+                 </div>
+-                <h3>Discovery</h3>
+-                <p>Deep-dive into your business, market, competition, and audience to map the real opportunity.</p>
++                <h3>Discover</h3>
++                <p>Understanding your business, customers, challenges, and opportunities.</p>
+                 <div className="process-card-glow"></div>
+               </div>
+             </FadeUp>
+@@ -606,8 +752,8 @@ const LandingPage = () => {
+                 <div className="process-card-icon">
+                   <Lightbulb size={28} />
+                 </div>
+-                <h3>Strategy</h3>
+-                <p>Craft a precise growth roadmap ÔÇö every channel, asset, and campaign planned for maximum ROI.</p>
++                <h3>Strategize</h3>
++                <p>Creating a customized roadmap focused on growth and measurable outcomes.</p>
+                 <div className="process-card-glow"></div>
+               </div>
+             </FadeUp>
+@@ -617,8 +763,8 @@ const LandingPage = () => {
+                 <div className="process-card-icon">
+                   <Palette size={28} />
+                 </div>
+-                <h3>Creation</h3>
+-                <p>Content production, brand development, website/app builds ÔÇö everything crafted to perfection.</p>
++                <h3>Build</h3>
++                <p>Developing content, systems, websites, campaigns, and digital assets.</p>
+                 <div className="process-card-glow"></div>
+               </div>
+             </FadeUp>
+@@ -629,7 +775,7 @@ const LandingPage = () => {
+                   <Rocket size={28} />
+                 </div>
+                 <h3>Launch</h3>
+-                <p>Simultaneous deployment of campaigns, systems, and platforms for maximum market impact.</p>
++                <p>Executing campaigns and activating digital growth channels.</p>
+                 <div className="process-card-glow"></div>
+               </div>
+             </FadeUp>
+@@ -640,7 +786,7 @@ const LandingPage = () => {
+                   <Award size={28} />
+                 </div>
+                 <h3>Scale</h3>
+-                <p>Continuous optimization, A/B testing, and growth hacking to compound results over time.</p>
++                <p>Optimizing performance and expanding opportunities for sustainable growth.</p>
+                 <div className="process-card-glow"></div>
+               </div>
+             </FadeUp>
+@@ -649,20 +795,35 @@ const LandingPage = () => {
+       </section>
+ 
+       {/* Metrics */}
+-      <section className="metrics-section reveal">
++      <section className="metrics-section reveal" style={{ padding: '140px 60px' }}>
++        <div className="section-container" style={{ textAlign: 'center', marginBottom: '60px' }}>
++          <FadeUp>
++            <span className="section-tag">RESULTS</span>
++          </FadeUp>
++          <h2 className="section-title">
++            <TextReveal as="span">REAL GROWTH.</TextReveal><br />
++            <TextReveal as="span" className="brand-gradient" delay={0.15}>REAL IMPACT.</TextReveal>
++          </h2>
++        </div>
+         <div className="metrics-grid">
+-          <MetricCard icon={<TrendingUp size={40} />} value="10M+" label="Reach Generated" />
+-          <MetricCard icon={<Video size={40} />} value="200+" label="Creative Assets" />
+-          <MetricCard icon={<Bot size={40} />} value="AI" label="Powered Systems" />
+-          <MetricCard icon={<BarChart3 size={40} />} value="50+" label="Brands Scaled" />
++          <MetricCard icon={<Code2 size={40} />} value="500+" label="Projects Delivered" />
++          <MetricCard icon={<Sparkles size={40} />} value="100+" label="Brands Transformed" />
++          <MetricCard icon={<TrendingUp size={40} />} value="10M+" label="Audience Reach Generated" />
++          <MetricCard icon={<Award size={40} />} value="95%" label="Client Retention Rate" />
+         </div>
+       </section>
+ 
+       {/* Testimonials */}
+       <section id="testimonials" className="testimonials-section reveal">
+         <div className="section-container">
+-          <span className="section-tag">Client Results</span>
+-          <h2 className="section-title">REAL GROWTH.<br />REAL WORDS.</h2>
++          <span className="section-tag">TESTIMONIALS</span>
++          <h2 className="section-title">
++            <TextReveal as="span">BUSINESSES</TextReveal><br />
++            <TextReveal as="span" className="brand-gradient" delay={0.15}>IN MOTION.</TextReveal>
++          </h2>
++          <p className="section-subtitle">
++            Hear from businesses that partnered with BigMotion to transform their digital presence and accelerate growth.
++          </p>
+           
+           <div className="testimonials-grid">
+             <TestimonialCard 
+@@ -693,11 +854,13 @@ const LandingPage = () => {
+       {/* Clients & Brands */}
+       <section id="clients" className="clients-section reveal">
+         <div className="section-container">
+-          <span className="section-tag">Ôùå Trusted By Leading Brands</span>
+-          <h2 className="section-title">CLIENTS WHO<br />TRUST OUR <span className="story-title-italic">MOTION.</span></h2>
++          <span className="section-tag">OUR CLIENTS</span>
++          <h2 className="section-title">
++            <TextReveal as="span">TRUSTED BY</TextReveal><br />
++            <TextReveal as="span" className="brand-gradient" delay={0.15}>GROWING BRANDS.</TextReveal>
++          </h2>
+           <p className="section-subtitle">
+-            From national retail giants to passionate local brands ÔÇö we've helped shape 
+-            digital presence and growth for businesses across every industry.
++            From local startups and established businesses to ambitious entrepreneurs, we partner with brands that are ready to grow.
+           </p>
+         </div>
+         
+@@ -743,8 +906,11 @@ const LandingPage = () => {
+       {/* Pricing */}
+       <section id="pricing" className="pricing-section reveal">
+         <div className="section-container">
+-          <span className="section-tag">Investment</span>
+-          <h2 className="section-title">CHOOSE YOUR<br />GROWTH TIER.</h2>
++          <span className="section-tag">PLANS</span>
++          <h2 className="section-title">
++            <TextReveal as="span">FLEXIBLE SOLUTIONS FOR EVERY</TextReveal><br />
++            <TextReveal as="span" className="brand-gradient" delay={0.15}>STAGE OF GROWTH.</TextReveal>
++          </h2>
+           <p className="section-subtitle">
+             Retainer packages engineered to match your stage of growth. No surprises ÔÇö just results.
+           </p>
+@@ -755,7 +921,7 @@ const LandingPage = () => {
+               name="STARTER"
+               price="Ôé╣15K"
+               period="/month"
+-              description="For small businesses building their digital foundation."
++              description="For businesses beginning their digital journey."
+               features={[
+                 'Social Media Setup & Management',
+                 'Google Business Optimization',
+@@ -772,7 +938,7 @@ const LandingPage = () => {
+               name="GROWTH"
+               price="Ôé╣35K"
+               period="/month"
+-              description="For scaling brands ready to dominate their market."
++              description="For businesses looking to scale visibility and customer acquisition."
+               features={[
+                 'Everything in Starter',
+                 'Custom Website Development',
+@@ -788,10 +954,10 @@ const LandingPage = () => {
+             />
+             <PricingCard 
+               tier="Tier 03"
+-              name="DOMINANCE"
++              name="MOMENTUM"
+               price="Ôé╣75K"
+               period="/month"
+-              description="Full-scale digital ecosystem for serious market leaders."
++              description="For brands seeking complete digital transformation and accelerated growth."
+               features={[
+                 'Everything in Growth',
+                 'Mobile App Development',
+@@ -803,7 +969,7 @@ const LandingPage = () => {
+                 'Weekly Strategy Sessions',
+                 'Priority 24/7 Support'
+               ]}
+-              buttonText="Claim Dominance"
++              buttonText="Claim Momentum"
+               outlined
+             />
+           </div>
+@@ -814,15 +980,15 @@ const LandingPage = () => {
+       <section id="gallery" className="gallery-section">
+         <div className="section-container">
+           <FadeUp>
+-            <span className="section-tag">Ôùå Behind The Scenes</span>
++            <span className="section-tag">BEHIND THE SCENES</span>
+           </FadeUp>
+           <h2 className="section-title">
+-            <TextReveal as="span">THE STUDIO</TextReveal><br />
+-            <TextReveal as="span" className="brand-gradient" delay={0.15}>IN ACTION.</TextReveal>
++            <TextReveal as="span">THE WORK BEHIND</TextReveal><br />
++            <TextReveal as="span" className="brand-gradient" delay={0.15}>THE GROWTH.</TextReveal>
+           </h2>
+           <FadeUp delay={0.3}>
+             <p className="section-subtitle">
+-              A glimpse into the creative process ÔÇö where ideas become campaigns and brands become legacies.
++              A glimpse into our creative process, strategy sessions, production shoots, development work, and campaign execution.
+             </p>
+           </FadeUp>
+           
+@@ -908,29 +1074,81 @@ const LandingPage = () => {
+         <div className="section-container">
+           <div className="about-content">
+             <div className="about-left">
+-              <span className="section-tag">About BigMotion</span>
+-              <h2 className="section-title">BUILT BY<br />OBSESSED<br />BUILDERS.</h2>
++              <span className="section-tag">ABOUT BIGMOTION</span>
++              <h2 className="section-title">
++                <TextReveal as="span">THE TEAM BEHIND</TextReveal><br />
++                <TextReveal as="span" className="brand-gradient" delay={0.15}>THE MOTION.</TextReveal>
++              </h2>
+               <p className="section-subtitle">
+-                We're not just marketers. We're a team of strategists, creators, engineers, 
+-                and growth architects united by one goal ÔÇö making your business impossible to ignore.
++                BigMotion is powered by a diverse team of MBA marketers, creative strategists, developers, content creators, designers, and AI specialists. Together, we combine business thinking, creativity, and technology to help brands unlock their full digital potential.
+               </p>
+               
+-              <div className="values-list">
+-                <ValueItem 
+-                  icon={<Target size={32} />}
+-                  title="Mission-Driven"
+-                  description="We measure our success by your growth ÔÇö every campaign, every asset, every system is built with your business outcome as the north star."
+-                />
+-                <ValueItem 
+-                  icon={<BarChart3 size={32} />}
+-                  title="Data Over Guesswork"
+-                  description="Every decision is backed by analytics, A/B testing, and market intelligence ÔÇö not gut feelings."
+-                />
+-                <ValueItem 
+-                  icon={<Zap size={32} />}
+-                  title="Speed & Precision"
+-                  description="We move fast and we move right. Premium quality at startup velocity."
+-                />
++              <div className="about-mv-grid" style={{
++                display: 'grid',
++                gridTemplateColumns: '1fr 1fr',
++                gap: '24px',
++                marginTop: '40px',
++                width: '100%'
++              }}>
++                <div className="about-mv-card" style={{
++                  background: 'rgba(255, 255, 255, 0.02)',
++                  border: '1px solid rgba(255, 255, 255, 0.08)',
++                  padding: '32px 28px',
++                  borderRadius: '20px',
++                  position: 'relative',
++                  overflow: 'hidden'
++                }}>
++                  <div style={{
++                    width: '40px',
++                    height: '40px',
++                    borderRadius: '12px',
++                    background: 'rgba(59, 130, 246, 0.1)',
++                    border: '1px solid rgba(59, 130, 246, 0.2)',
++                    display: 'flex',
++                    alignItems: 'center',
++                    justifyContent: 'center',
++                    color: 'var(--blue)',
++                    marginBottom: '20px'
++                  }}>
++                    <Target size={22} />
++                  </div>
++                  <h4 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '10px', color: 'var(--white)' }}>
++                    Our Mission
++                  </h4>
++                  <p style={{ fontSize: '14px', lineHeight: '1.6', color: 'var(--gray)' }}>
++                    To empower businesses with innovative digital systems that create sustainable growth.
++                  </p>
++                </div>
++
++                <div className="about-mv-card" style={{
++                  background: 'rgba(255, 255, 255, 0.02)',
++                  border: '1px solid rgba(255, 255, 255, 0.08)',
++                  padding: '32px 28px',
++                  borderRadius: '20px',
++                  position: 'relative',
++                  overflow: 'hidden'
++                }}>
++                  <div style={{
++                    width: '40px',
++                    height: '40px',
++                    borderRadius: '12px',
++                    background: 'rgba(232, 141, 255, 0.1)',
++                    border: '1px solid rgba(232, 141, 255, 0.2)',
++                    display: 'flex',
++                    alignItems: 'center',
++                    justifyContent: 'center',
++                    color: 'var(--purple)',
++                    marginBottom: '20px'
++                  }}>
++                    <Sparkles size={22} />
++                  </div>
++                  <h4 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '10px', color: 'var(--white)' }}>
++                    Our Vision
++                  </h4>
++                  <p style={{ fontSize: '14px', lineHeight: '1.6', color: 'var(--gray)' }}>
++                    To become the most trusted digital growth partner for ambitious businesses across India and beyond.
++                  </p>
++                </div>
+               </div>
+             </div>
+             
+@@ -948,44 +1166,71 @@ const LandingPage = () => {
+           </div>
+         </div>
+       </section>
++      {/* Final CTA */}
++      <section className="final-cta-section reveal" style={{ padding: '120px 60px', background: 'radial-gradient(circle at center, rgba(59, 130, 246, 0.08) 0%, transparent 70%)', position: 'relative', borderTop: '1px solid rgba(255, 255, 255, 0.05)', borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
++        <div className="section-container" style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
++          <h2 className="section-title" style={{ marginBottom: '24px' }}>
++            <TextReveal as="span">READY TO MOVE YOUR</TextReveal><br />
++            <TextReveal as="span" className="brand-gradient" delay={0.15}>BUSINESS FORWARD?</TextReveal>
++          </h2>
++          <p className="section-subtitle" style={{ maxWidth: '750px', marginBottom: '40px', margin: '0 auto 40px' }}>
++            Whether you're launching, growing, or scaling, BigMotion provides the strategy, technology, and execution needed to build a powerful digital presence and drive real business growth.
++          </p>
++          <div className="cta-buttons" style={{ display: 'flex', gap: '20px', justifyContent: 'center' }}>
++            <button className="btn-primary" onClick={() => scrollToSection('contact')}>
++              <span>Book A Free Consultation</span>
++              <ArrowRight size={20} />
++            </button>
++            <button className="btn-secondary" onClick={() => scrollToSection('contact')}>
++              Let's Talk Growth
++            </button>
++          </div>
++        </div>
++      </section>
+ 
+       {/* Contact */}
+       <section id="contact" className="contact-section reveal">
+         <div className="section-container">
+           <div className="contact-content">
+             <div className="contact-left">
+-              <span className="section-tag">Contact</span>
++              <span className="section-tag">CONTACT US</span>
+               <h2 className="contact-title">
+-                LET'S BUILD YOUR<br />
+-                <span className="gradient-text">DIGITAL GROWTH</span><br />
+-                ENGINE.
++                LET'S BUILD<br />
++                <span className="brand-gradient">SOMETHING BIG.</span>
+               </h2>
+               <p className="contact-subtitle">
+-                Schedule a free consultation and let's map out exactly how BigMotion can scale your business.
++                Tell us about your business, goals, and challenges. We'll help you create a roadmap for digital growth.
+               </p>
+               
+               <div className="contact-channels">
+-                <a href="tel:+919876543210" className="channel-button">
++                <a href="tel:+91XXXXXXXXXX" className="channel-button">
+                   <Phone size={24} />
+                   <div className="channel-info">
+                     <span className="channel-label">Call Us</span>
+-                    <span className="channel-value">+91 98765 43210</span>
++                    <span className="channel-value">+91 XXXXX XXXXX</span>
+                   </div>
+                 </a>
+-                <a href="https://wa.me/919876543210" className="channel-button">
++                <a href="https://wa.me/91XXXXXXXXXX" className="channel-button">
+                   <MessageCircle size={24} />
+                   <div className="channel-info">
+                     <span className="channel-label">WhatsApp</span>
+                     <span className="channel-value">Chat with us instantly</span>
+                   </div>
+                 </a>
+-                <a href="mailto:hello@bigmotion.agency" className="channel-button">
++                <a href="mailto:hello@bigmotion.in" className="channel-button">
+                   <Mail size={24} />
+                   <div className="channel-info">
+                     <span className="channel-label">Email</span>
+-                    <span className="channel-value">hello@bigmotion.agency</span>
++                    <span className="channel-value">hello@bigmotion.in</span>
+                   </div>
+                 </a>
++                <div className="channel-button" style={{ cursor: 'default' }}>
++                  <Compass size={24} style={{ color: 'var(--blue)' }} />
++                  <div className="channel-info">
++                    <span className="channel-label">Location</span>
++                    <span className="channel-value">Ramgarh, Jharkhand, India</span>
++                  </div>
++                </div>
+               </div>
+             </div>
+             
+@@ -1006,7 +1251,15 @@ const LandingPage = () => {
+                 alt="BigMotion" 
+                 className="footer-logo"
+               />
+-              <p className="footer-tagline">Vision Into Momentum</p>
++              <p className="footer-tagline" style={{ fontWeight: '700', fontSize: '18px', color: 'var(--white)', marginBottom: '8px' }}>
++                Growth In Motion.
++              </p>
++              <p className="footer-keywords" style={{ fontSize: '12px', color: 'var(--gray)', marginBottom: '8px', letterSpacing: '0.5px' }}>
++                Strategy ÔÇó Branding ÔÇó Content ÔÇó Technology ÔÇó AI ÔÇó Growth
++              </p>
++              <p className="footer-sub-tagline" style={{ fontSize: '14px', color: 'var(--white)', fontWeight: '600', marginBottom: '20px' }}>
++                Turning Attention Into Business Growth. ­ƒÜÇ
++              </p>
+               <div className="footer-socials">
+                 <a href="#" className="social-link"><Instagram size={20} /></a>
+                 <a href="#" className="social-link"><Facebook size={20} /></a>
+@@ -1032,9 +1285,9 @@ const LandingPage = () => {
+               </div>
+               <div className="footer-column">
+                 <h4>Contact</h4>
+-                <a href="tel:+919876543210">+91 98765 43210</a>
+-                <a href="mailto:hello@bigmotion.agency">hello@bigmotion.agency</a>
+-                <a href="https://wa.me/919876543210">WhatsApp Support</a>
++                <a href="tel:+91XXXXXXXXXX">+91 XXXXX XXXXX</a>
++                <a href="mailto:hello@bigmotion.in">hello@bigmotion.in</a>
++                <a href="https://wa.me/91XXXXXXXXXX">WhatsApp Support</a>
+               </div>
+             </div>
+           </div>
+diff --git a/frontend/src/styles/landing.css b/frontend/src/styles/landing.css
+index e13cad9..e86da67 100644
+--- a/frontend/src/styles/landing.css
++++ b/frontend/src/styles/landing.css
+@@ -3011,4 +3011,69 @@ body {
+     grid-template-columns: 1fr;
+     gap: 32px;
+   }
++}
++
++/* Custom Added Styles for New/Updated Sections */
++.hero-trust-text {
++  font-size: 13px;
++  color: var(--gray);
++  margin-top: 18px;
++  opacity: 0.8;
++  font-weight: 500;
++}
++
++.why-section {
++  background: var(--dark);
++}
++
++.why-card:hover {
++  transform: translateY(-8px);
++  border-color: rgba(59, 130, 246, 0.4) !important;
++  box-shadow: 0 16px 40px rgba(59, 130, 246, 0.15);
++}
++
++.why-card-glow {
++  transition: opacity 0.3s ease;
++  opacity: 0.5;
++}
++
++.why-card:hover .why-card-glow {
++  opacity: 1;
++}
++
++.about-mv-card {
++  transition: all 0.4s ease;
++}
++
++.about-mv-card:hover {
++  transform: translateY(-5px);
++  border-color: rgba(232, 141, 255, 0.4) !important;
++  box-shadow: 0 12px 30px rgba(232, 141, 255, 0.1);
++}
++
++.final-cta-section {
++  overflow: hidden;
++}
++
++.cta-buttons button {
++  font-family: inherit;
++}
++
++.eco-feat-card:hover {
++  transform: translateY(-3px);
++  border-color: rgba(232, 141, 255, 0.3) !important;
++  background: rgba(255, 255, 255, 0.05) !important;
++  box-shadow: 0 8px 24px rgba(232, 141, 255, 0.05);
++}
++
++@media (max-width: 768px) {
++  .why-grid {
++    grid-template-columns: 1fr !important;
++  }
++  .about-mv-grid {
++    grid-template-columns: 1fr !important;
++  }
++  .ecosystem-features-grid {
++    grid-template-columns: 1fr !important;
++  }
+ }
+\ No newline at end of file
+diff --git a/test_reports/.gitkeep b/test_reports/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/test_reports/pytest/.gitkeep b/test_reports/pytest/.gitkeep
+deleted file mode 100644
+index e69de29..0000000
+diff --git a/tests/__init__.py b/tests/__init__.py
+deleted file mode 100644
+index e69de29..0000000

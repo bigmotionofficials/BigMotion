@@ -1,0 +1,11 @@
+{
+  "name": "bigmotion-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npm run start --prefix frontend",
+    "dev": "npm run start --prefix frontend",
+    "build": "npm run build --prefix frontend",
+    "test": "npm run test --prefix frontend"
+  }
+}

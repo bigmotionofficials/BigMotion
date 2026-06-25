@@ -25,15 +25,17 @@ export const TextReveal = ({ children, className = '', delay = 0, as: Component 
   return (
     <Component ref={ref} className={`text-reveal ${className} ${isVisible ? 'visible' : ''}`}>
       {words.map((word, i) => (
-        <span key={i} className="text-reveal-word">
-          <span 
-            className="text-reveal-word-inner"
-            style={{ transitionDelay: `${delay + i * 0.05}s` }}
-          >
-            {word}
+        <React.Fragment key={i}>
+          <span className="text-reveal-word">
+            <span 
+              className="text-reveal-word-inner"
+              style={{ transitionDelay: `${delay + i * 0.05}s` }}
+            >
+              {word}
+            </span>
           </span>
           {i < words.length - 1 ? ' ' : ''}
-        </span>
+        </React.Fragment>
       ))}
     </Component>
   );
